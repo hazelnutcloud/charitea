@@ -72,8 +72,7 @@ function App() {
 
         {isFundsModalOpen && (
           <CreateFundModal
-            onSubmit={() => setIsFundsModalOpen(false)}
-            onCancel={() => setIsFundsModalOpen(false)}
+            closeModal={() => setIsFundsModalOpen(false)}
           ></CreateFundModal>
         )}
 
@@ -81,7 +80,7 @@ function App() {
           {/* List of Institutions */}
           <ul className="fund-list">
             {funds.map((fund) => (
-              <li>
+              <li key={fund.title}>
                 <div className="fund-card">
                   <section className="fund-img">
                     <img src={fund.imageUri} alt="" />

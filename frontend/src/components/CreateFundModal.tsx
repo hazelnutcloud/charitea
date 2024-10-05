@@ -1,26 +1,22 @@
 import { useState } from "react";
 import "./CreateFundModal.css";
+import { IDKitWidget } from "@worldcoin/idkit"
 
 export function CreateFundModal(params: {
-  onSubmit: (params: {
-    title: string;
-    description: string;
-    image: File;
-    worldIdProof: string;
-  }) => void;
-  onCancel: () => void;
+ closeModal: () => void
 }) {
   const [title, setTitle] = useState<string | undefined>(undefined);
   const [description, setDescription] = useState<string | undefined>(undefined);
   const [image, setImage] = useState<File | undefined>(undefined);
-  const [worldIdProof, setWorldIdProof] = useState<string | undefined>(
-    undefined,
-  );
 
-  const handleSubmit = () => {
-    if (!title || !description || !image || !worldIdProof) return;
-    params.onSubmit({ title, description, image, worldIdProof });
+  const handleSubmit = (open: () => void) => {
+    if (!title || !description || !image) return;
+    open()
   };
+
+  const handleVerify = (params: { proof: string }) => {
+    console.log(params.proof)
+  }
 
   return (
     <div className="popup-modal">
@@ -68,7 +64,7 @@ export function CreateFundModal(params: {
                     type="file"
                     accept="image/png, image/jpeg"
                     placeholder="Image"
-                    value={image?.webkitRelativePath ?? ""}
+                    // value={image?.webkitRelativePath ?? ""}
                     onChange={(e) =>
                       setImage(e.target.files?.item(0) ?? undefined)
                     }
@@ -80,10 +76,17 @@ export function CreateFundModal(params: {
         </div>
 
         <div className="popup-actions">
-          <button className="submit-btn" onClick={handleSubmit}>
+        <IDKitWidget
+          app_id="app_staging_ac0a88ccb1edbf495b092c2408473e4d"
+          action="create-fund"
+          handleVerify={handleVerify}
+          onSuccess={() => params.closeModal()}
+        >
+          {({ open }) => <button className="submit-btn" onClick={() => handleSubmit(open)}>
             Submit
-          </button>
-          <button className="close-btn" onClick={params.onCancel}>
+          </button>}
+          </IDKitWidget >
+          <button className="close-btn" onClick={params.closeModal}>
             Cancel
           </button>
         </div>
