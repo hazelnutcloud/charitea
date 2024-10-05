@@ -1,0 +1,29 @@
+type FundCreated @entity(immutable: true) {
+  id: Bytes!
+  fundIndex: BigInt! # uint256
+  owner: Bytes! # address
+  data: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type FundDonated @entity(immutable: true) {
+  id: Bytes!
+  fundIndex: BigInt! # uint256
+  donator: Bytes! # address
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type FundWithdrawn @entity(immutable: true) {
+  id: Bytes!
+  fundIndex: BigInt! # uint256
+  withdrawer: Bytes! # address
+  amount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

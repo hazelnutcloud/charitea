@@ -1,0 +1,32 @@
+specVersion: 1.0.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Charitea
+    network: scroll-sepolia
+    source:
+      address: "0x37EfDdd52438199Db56340581642B25A159a3561"
+      abi: Charitea
+      startBlock: 6875537
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - FundCreated
+        - FundDonated
+        - FundWithdrawn
+      abis:
+        - name: Charitea
+          file: ./abis/Charitea.json
+      eventHandlers:
+        - event: FundCreated(indexed uint256,indexed address,string)
+          handler: handleFundCreated
+        - event: FundDonated(indexed uint256,indexed address,uint256)
+          handler: handleFundDonated
+        - event: FundWithdrawn(indexed uint256,indexed address,uint256)
+          handler: handleFundWithdrawn
+      file: ./src/charitea.ts
