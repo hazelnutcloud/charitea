@@ -4,9 +4,13 @@ type Fund @entity {
   owner: Wallet!
   amount: BigInt!
   donations: [Donation]! @derivedFrom(field: "fund")
+  withdrawals: [Withdrawal]! @derivedFrom(field: "fund")
   creationTimestamp: BigInt!
   creationBlock: BigInt!
   creationTxHash: Bytes!
+  title: String
+  description: String
+  imageURI: String
 }
 
 type Donation @entity {
@@ -18,9 +22,20 @@ type Donation @entity {
   txHash: Bytes!
 }
 
+type Withdrawal @entity {
+  id: Bytes!
+  fund: Fund!
+  withdrawer: Wallet!
+  timestamp: BigInt!
+  block: BigInt!
+  txHash: Bytes!
+  amount: BigInt!
+}
+
 type Wallet @entity {
   id: Bytes!
   address: Bytes!
   fundsOwned: [Fund]! @derivedFrom(field: "owner")
   donations: [Donation]! @derivedFrom(field: "donator")
+  fundWithdrawals: [Withdrawal]! @derivedFrom(field: "withdrawer")
 }
