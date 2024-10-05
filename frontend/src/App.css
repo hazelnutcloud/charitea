@@ -1,42 +1,166 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.search-filter,
+.result {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Search Bar Part */
+.search-bar[type="text"] {
+    margin: 10px 0;
+    max-width: 250px;
+    height: 20px;
+    background-color: #fff;
+    color: #242424;
+    padding: 0.15rem 0.5rem;
+    min-height: 40px;
+    border-radius: 4px;
+    outline: none;
+    border: none;
+    box-shadow: 0px 10px 20px -18px blue;
+    border-bottom: 3px solid #0d14e9;
+    transition: 0.1s ease;
+}
+.search-bar[type="text"]:hover {
+    outline: 2px solid #0d14e9;
+    max-width: 300px;
+}
+.search-bar[type="text"]:focus {
+    border-bottom: 3px solid #0d14e9;
+    border-radius: 5px 5px 2px 2px;
+    transform: scale(1.1);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+/* Filter Option Part */
+.filter-btn {
+    width: 50px;
+    height: 50px;
+    margin: 0 10px;
+    background-color: #0d14e9;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.192);
+    cursor: pointer;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.021);
+    transition: all 0.3s;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+.filter-btn img {
+    height: 16px;
+    transition: all 0.3s;
 }
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.filter-btn:hover {
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.11);
+    background-color: #6569d8;
+}
+.filter-popup {
+    position: fixed;
+    top: 0;
+    right: -300px; /* Hidden by default */
+    width: 250px; /* Increased width slightly for more space */
+    height: 100%;
+    background-color: #fff;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 10px 0 0 10px; /* Adds rounded corners on the left side */
+    transition:
+        right 0.4s ease,
+        background-color 0.3s,
+        box-shadow 0.3s;
+    z-index: 1000;
+}
+.filter-popup h3 {
+    margin-top: 0;
+    font-size: 18px;
+    color: #0d14e9;
+}
+.filter-popup.show {
+    right: 0; /* Show the popup */
+}
+.filter-popup.show:hover {
+    background-color: #f0f2ff; /* Subtle color change on hover */
+    box-shadow: -2px 0 15px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.filter-select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s;
+}
+.filter-select:focus {
+    border-color: #0d14e9;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+/* Add Funds part */
+.add-btn {
+    display: flex;
+    width: 135px;
+    height: 50px;
+    margin: 0 10px;
+    align-items: center;
+    background-color: #0d14e9;
+    color: #f9f9f9;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.192);
+    cursor: pointer;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.021);
+    transition: all 0.3s;
+}
+.add-btn img {
+    height: 16px;
+    margin: auto 8px;
+    transition: all 0.3s;
+}
+.add-btn:hover {
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.11);
+    background-color: #6569d8;
 }
 
-.card {
-  padding: 2em;
+/* Institution Detail Card */
+.fund-list {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping to the next line after 4 cards */
+    justify-content: center;
+    align-items: center;
+    list-style-type: none;
+    padding: 0; /* Removes padding */
+    margin: 0; /* Removes margin */
 }
-
-.read-the-docs {
-  color: #888;
+.fund-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin: 10px;
+    width: 220px; /* Make sure each card's width fits well */
+    height: 200px;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+.fund-img {
+    position: relative;
+    width: 100%;
+    height: 60%;
+    overflow: hidden;
+}
+.fund-detail {
+    height: 45px;
+}
+.fund-buttons #donate {
+    width: 65px;
+    height: 25px;
+    margin: 0 10px;
+    color: #f9f9f9;
+    background-color: #0d14e9;
+    border-radius: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.192);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.fund-buttons #donate:hover {
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.11);
+    background-color: #6569d8;
 }

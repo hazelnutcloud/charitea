@@ -1,0 +1,5 @@
+{
+  "name": "charitea",
+  "private": "true",
+  "workspaces": ["frontend", "server"]
+}

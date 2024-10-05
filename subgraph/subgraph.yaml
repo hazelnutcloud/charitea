@@ -23,7 +23,7 @@ dataSources:
         - name: Charitea
           file: ./abis/Charitea.json
       eventHandlers:
-        - event: FundCreated(indexed uint256,indexed address,string)
+        - event: FundCreated(indexed uint256,indexed address,string,string)
           handler: handleFundCreated
         - event: FundDonated(indexed uint256,indexed address,uint256)
           handler: handleFundDonated

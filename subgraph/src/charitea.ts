@@ -17,6 +17,7 @@ export function handleFundCreated(event: FundCreatedEvent): void {
   fund.creationTxHash = event.transaction.hash;
   fund.fundIndex = event.params.fundIndex;
   fund.owner = event.transaction.from;
+  fund.worldIdProof = event.params.worldIdProof;
 
   let data = ipfs.cat(event.params.data);
 

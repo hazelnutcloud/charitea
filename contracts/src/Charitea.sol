@@ -6,21 +6,45 @@ contract Charitea {
         address owner;
         uint256 value;
         string data;
+        string worldIdProof;
     }
 
     uint256 fundCount;
     Fund[] public funds;
 
-    event FundCreated(uint256 indexed fundIndex, address indexed owner, string data);
-    event FundDonated(uint256 indexed fundIndex, address indexed donator, uint256 amount);
-    event FundWithdrawn(uint256 indexed fundIndex, address indexed withdrawer, uint256 amount);
+    event FundCreated(
+        uint256 indexed fundIndex,
+        address indexed owner,
+        string data,
+        string worldIdProof
+    );
+    event FundDonated(
+        uint256 indexed fundIndex,
+        address indexed donator,
+        uint256 amount
+    );
+    event FundWithdrawn(
+        uint256 indexed fundIndex,
+        address indexed withdrawer,
+        uint256 amount
+    );
 
     error UnauthorizedWithdrawal();
 
-    function createFund(string calldata data) public returns (uint256 fundIndex) {
+    function createFund(
+        string calldata data,
+        string calldata worldIdProof
+    ) public returns (uint256 fundIndex) {
         fundIndex = fundCount++;
-        funds.push(Fund({owner: msg.sender, value: 0, data: data}));
-        emit FundCreated(fundIndex, msg.sender, data);
+        funds.push(
+            Fund({
+                owner: msg.sender,
+                value: 0,
+                data: data,
+                worldIdProof: worldIdProof
+            })
+        );
+        emit FundCreated(fundIndex, msg.sender, data, worldIdProof);
     }
 
     function donateFund(uint256 fundIndex) public payable {

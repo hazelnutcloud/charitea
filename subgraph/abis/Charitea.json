@@ -20,6 +20,12 @@
         "internalType": "string",
         "name": "data",
         "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "worldIdProof",
+        "type": "string"
       }
     ],
     "name": "FundCreated",
@@ -76,7 +82,10 @@
     "type": "event"
   },
   {
-    "inputs": [{ "internalType": "string", "name": "data", "type": "string" }],
+    "inputs": [
+      { "internalType": "string", "name": "data", "type": "string" },
+      { "internalType": "string", "name": "worldIdProof", "type": "string" }
+    ],
     "name": "createFund",
     "outputs": [
       { "internalType": "uint256", "name": "fundIndex", "type": "uint256" }
@@ -99,7 +108,8 @@
     "outputs": [
       { "internalType": "address", "name": "owner", "type": "address" },
       { "internalType": "uint256", "name": "value", "type": "uint256" },
-      { "internalType": "string", "name": "data", "type": "string" }
+      { "internalType": "string", "name": "data", "type": "string" },
+      { "internalType": "string", "name": "worldIdProof", "type": "string" }
     ],
     "stateMutability": "view",
     "type": "function"

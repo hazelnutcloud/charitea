@@ -11,6 +11,7 @@ type Fund @entity {
   title: String
   description: String
   imageURI: String
+  worldIdProof: String!
 }
 
 type Donation @entity {
