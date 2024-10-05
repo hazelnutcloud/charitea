@@ -77,7 +77,6 @@ export function CreateFundModal(params: {
                     type="file"
                     accept="image/png, image/jpeg"
                     placeholder="Image"
-                    // value={image?.webkitRelativePath ?? ""}
                     onChange={(e) =>
                       setImage(e.target.files?.item(0) ?? undefined)
                     }

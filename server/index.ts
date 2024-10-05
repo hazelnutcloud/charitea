@@ -6,11 +6,10 @@ export type App = typeof app
 
 export const app = new Elysia()
   .post("/funds", async function verify({ body, error }) {
-    console.log('here')
     const signal = JSON.stringify({ title: body.title, description: body.description, image: body.base64EncodedImage });
+
     const verifyRes: IVerifyResponse = await verifyCloudProof(body.worldIdData as ISuccessResult, 'app_staging_ac0a88ccb1edbf495b092c2408473e4d', 'create-fund', signal)
     if (!verifyRes.success) {
-      console.log(verifyRes)
       return error(400, JSON.stringify(verifyRes))
     }
 
@@ -18,7 +17,7 @@ export const app = new Elysia()
       pinataJwt: process.env.PINATA_JWT,
       pinataGateway: process.env.GATEWAY_URL
     })
-    console.log('uploading')
+
     const upload = await pinata.upload.file(new File([JSON.stringify({
      title: body.title,
      description: body.description,
@@ -26,9 +25,7 @@ export const app = new Elysia()
      ...body.worldIdData
     })], "fund-data.json", { type: "application/json" }))
 
-    console.log('upload', upload)
-
-    return upload
+    return upload.IpfsHash
   }, {
     body: t.Object({
       worldIdData:t.Object({

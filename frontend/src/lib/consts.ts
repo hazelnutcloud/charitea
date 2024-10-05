@@ -1,0 +1,1 @@
+export const chariteaAddress = "0xc524F564E9Ff8eA026e3afe1c874916edeF1C4E4" as const
