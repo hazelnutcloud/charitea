@@ -54,16 +54,16 @@ export function CreateFundModal(params: {
                 </td>
               </tr>
               <tr>
-                <td>
+                <td className="align-top pr-4">
                   <label htmlFor="description">Description</label>
                 </td>
                 <td>
-                  <input
+                  <textarea
                     id="description"
-                    type="text"
                     placeholder="Description"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
+                    className="w-full"
                   />
                 </td>
               </tr>
