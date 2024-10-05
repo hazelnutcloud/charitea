@@ -1,21 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./CreateFundModal.css";
-import { IDKitWidget } from "@worldcoin/idkit"
+import { IDKitWidget, ISuccessResult } from "@worldcoin/idkit"
+import { client } from "../lib/client";
+import { toBase64 } from "../lib/encode";
 
 export function CreateFundModal(params: {
  closeModal: () => void
 }) {
-  const [title, setTitle] = useState<string | undefined>(undefined);
-  const [description, setDescription] = useState<string | undefined>(undefined);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const [image, setImage] = useState<File | undefined>(undefined);
+  const [encodedImage, setEncodedImage] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    if (!image) return;
+    (async () => {
+      const enImage = await toBase64(image);
+      setEncodedImage(enImage);
+    })()
+  }, [image])
 
   const handleSubmit = (open: () => void) => {
-    if (!title || !description || !image) return;
-    open()
+     if (!title || !description || !image) return;
+    open();
   };
 
-  const handleVerify = (params: { proof: string }) => {
-    console.log(params.proof)
+  const handleVerify = async (params: ISuccessResult) => {
+    if (!title || !description || !encodedImage) throw new Error("unexpected missing fields");
+    const res = await client.funds.post({ worldIdData: {...params, action: "create-fund"}, title, base64EncodedImage: encodedImage, description })
+    console.log('res', res)
   }
 
   return (
@@ -80,6 +93,7 @@ export function CreateFundModal(params: {
           app_id="app_staging_ac0a88ccb1edbf495b092c2408473e4d"
           action="create-fund"
           handleVerify={handleVerify}
+          signal={JSON.stringify({title, description, image: encodedImage})}
           onSuccess={() => params.closeModal()}
         >
           {({ open }) => <button className="submit-btn" onClick={() => handleSubmit(open)}>

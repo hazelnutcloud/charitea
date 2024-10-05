@@ -27,6 +27,9 @@ export function handleFundCreated(event: FundCreatedEvent): void {
     const title = obj.get("title");
     const description = obj.get("description");
     const imageURI = obj.get("imageURI");
+    const merkleRoot = obj.get("merkleRoot");
+    const nullifierHash = obj.get("nullifierHash");
+    const verificationLevel = obj.get("verificationLevel");
     if (title != null) {
       fund.title = title.toString();
     }
@@ -35,6 +38,15 @@ export function handleFundCreated(event: FundCreatedEvent): void {
     }
     if (imageURI != null) {
       fund.imageURI = imageURI.toString();
+    }
+    if (merkleRoot != null) {
+      fund.merkleRoot = merkleRoot.toString();
+    }
+    if (nullifierHash != null) {
+      fund.nullifierHash = nullifierHash.toString();
+    }
+    if (verificationLevel != null) {
+      fund.verificationLevel = verificationLevel.toString();
     }
   }
 

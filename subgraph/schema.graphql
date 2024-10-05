@@ -12,6 +12,9 @@ type Fund @entity {
   description: String
   imageURI: String
   worldIdProof: String!
+  merkleRoot: String
+  nullifierHash: String
+  verificationLevel: String
 }
 
 type Donation @entity {
