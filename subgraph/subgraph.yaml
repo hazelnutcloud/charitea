@@ -3,6 +3,8 @@ indexerHints:
   prune: auto
 schema:
   file: ./schema.graphql
+features:
+  - ipfsOnEthereumContracts
 dataSources:
   - kind: ethereum
     name: Charitea

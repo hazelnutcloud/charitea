@@ -3,6 +3,7 @@ import { Coffee, CheckCircle } from "lucide-react";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -22,84 +23,95 @@ import { Plus } from "lucide-react";
 import { Label } from "./components/ui/label";
 import { Input } from "./components/ui/input";
 import { Textarea } from "./components/ui/textarea";
-import { loremIpsum } from "./lib/lorem";
+// import { loremIpsum } from "./lib/lorem";
 import { useEffect, useState } from "react";
 import { toBase64 } from "./lib/encode";
 import { IDKitWidget, ISuccessResult } from "@worldcoin/idkit";
 import { client } from "./lib/client";
 import { useToast } from "./hooks/use-toast";
-import { useWriteContract } from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 import { chariteaAbi } from "./lib/abi";
 import { chariteaAddress } from "./lib/consts";
 import { Toaster } from "./components/ui/toaster";
+import { parseEther } from "viem";
+import { useQuery } from "@tanstack/react-query";
+import { getFunds } from "./lib/query";
 
 export default function App() {
-  const funds = [
-    {
-      index: 0,
-      title: "My Fund",
-      description: loremIpsum,
-      timestamp: Date.now() / 1000,
-      owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
-      imageUri: "/fund-image.jpg",
-    },
-    {
-      index: 1,
-      title: "My Fund",
-      description: loremIpsum,
-      timestamp: Date.now() / 1000,
-      owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
-      imageUri: "/fund-image.jpg",
-    },
-    {
-      index: 2,
-      title: "My Fund",
-      description: loremIpsum,
-      timestamp: Date.now() / 1000,
-      owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
-      imageUri: "/fund-image.jpg",
-    },
-    {
-      index: 3,
-      title: "My Fund",
-      description: loremIpsum,
-      timestamp: Date.now() / 1000,
-      owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
-      imageUri: "/fund-image.jpg",
-    },
-    {
-      index: 4,
-      title: "My Fund",
-      description: loremIpsum,
-      timestamp: Date.now() / 1000,
-      owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
-      imageUri: "/fund-image.jpg",
-    },
-    {
-      index: 5,
-      title: "My Fund",
-      description: loremIpsum,
-      timestamp: Date.now() / 1000,
-      owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
-      imageUri: "/fund-image.jpg",
-    },
-    {
-      index: 6,
-      title: "My Fund",
-      description: loremIpsum,
-      timestamp: Date.now() / 1000,
-      owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
-      imageUri: "/fund-image.jpg",
-    },
-    {
-      index: 7,
-      title: "My Fund",
-      description: loremIpsum,
-      timestamp: Date.now() / 1000,
-      owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
-      imageUri: "/fund-image.jpg",
-    },
-  ];
+  // const funds = [
+  //   {
+  //     index: 0,
+  //     title: "My Fund",
+  //     description: loremIpsum,
+  //     timestamp: Date.now() / 1000,
+  //     owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
+  //     imageUri: "/fund-image.jpg",
+  //     donations: "10.4",
+  //   },
+  //   {
+  //     index: 1,
+  //     title: "My Fund",
+  //     description: loremIpsum,
+  //     timestamp: Date.now() / 1000,
+  //     owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
+  //     imageUri: "/fund-image.jpg",
+  //     donations: "10.4",
+  //   },
+  //   {
+  //     index: 2,
+  //     title: "My Fund",
+  //     description: loremIpsum,
+  //     timestamp: Date.now() / 1000,
+  //     owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
+  //     imageUri: "/fund-image.jpg",
+  //     donations: "10.4",
+  //   },
+  //   {
+  //     index: 3,
+  //     title: "My Fund",
+  //     description: loremIpsum,
+  //     timestamp: Date.now() / 1000,
+  //     owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
+  //     imageUri: "/fund-image.jpg",
+  //     donations: "10.4",
+  //   },
+  //   {
+  //     index: 4,
+  //     title: "My Fund",
+  //     description: loremIpsum,
+  //     timestamp: Date.now() / 1000,
+  //     owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
+  //     imageUri: "/fund-image.jpg",
+  //     donations: "10.4",
+  //   },
+  //   {
+  //     index: 5,
+  //     title: "My Fund",
+  //     description: loremIpsum,
+  //     timestamp: Date.now() / 1000,
+  //     owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
+  //     imageUri: "/fund-image.jpg",
+  //     donations: "10.4",
+  //   },
+  //   {
+  //     index: 6,
+  //     title: "My Fund",
+  //     description: loremIpsum,
+  //     timestamp: Date.now() / 1000,
+  //     owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
+  //     imageUri: "/fund-image.jpg",
+  //     donations: "10.4",
+  //   },
+  //   {
+  //     index: 7,
+  //     title: "My Fund",
+  //     description: loremIpsum,
+  //     timestamp: Date.now() / 1000,
+  //     owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
+  //     imageUri: "/fund-image.jpg",
+  //     donations: "10.4",
+  //   },
+  // ];
 
   const { toast } = useToast();
   const [title, setTitle] = useState("");
@@ -111,7 +123,10 @@ export default function App() {
   const [showNewFundDialog, setShowNewFundDialog] = useState(false);
   const [ipfsHash, setIpfsHash] = useState<string | undefined>();
   const [isVerifySuccess, setIsVerifySuccess] = useState(false);
+  const [donationAmount, setDonationAmount] = useState("0");
   const { writeContractAsync } = useWriteContract();
+  const { address } = useAccount();
+  const fundsQuery = useQuery({ queryKey: ["get-funds"], queryFn: getFunds });
 
   useEffect(() => {
     if (!image) return;
@@ -171,6 +186,34 @@ export default function App() {
         description: "See the console for more info",
       });
     }
+  };
+
+  const handleWithdraw = async (fundIndex: number) => {
+    await writeContractAsync({
+      abi: chariteaAbi,
+      address: chariteaAddress,
+      functionName: "withdrawFund",
+      args: [BigInt(fundIndex)],
+    });
+    toast({
+      title: "Successfully withdrew fund",
+    });
+  };
+
+  const handleDonate = async (fundIndex: number) => {
+    const value = parseEther(donationAmount);
+
+    await writeContractAsync({
+      abi: chariteaAbi,
+      address: chariteaAddress,
+      functionName: "donateFund",
+      args: [BigInt(fundIndex)],
+      value,
+    });
+
+    toast({
+      title: `Successfully donated ${donationAmount} ETH!`,
+    });
   };
 
   return (
@@ -276,32 +319,77 @@ export default function App() {
       </Dialog>
 
       {/* funds */}
-      <div className="flex flex-wrap gap-2 items-center justify-center">
-        {funds.map((fund) => (
-          <Card
-            key={fund.index}
-            className="flex-1 min-w-[350px] shadow rounded-xl"
-          >
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <CheckCircle className="text-green-400" size={20}></CheckCircle>
-                {fund.title}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="flex flex-col gap-2">
-                <img src={fund.imageUri} width="350" height="300"></img>
-                <p className="overflow-y-auto max-h-[200px]">
-                  {fund.description}
-                </p>
-              </div>
-            </CardContent>{" "}
-            <CardFooter className="flex justify-end">
-              <Button>Donate</Button>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
+      {fundsQuery.isLoading ? (
+        <p className="font-bold mx-auto">Loading funds...</p>
+      ) : fundsQuery.isSuccess ? fundsQuery.data.length > 0 ? (
+        <div className="flex flex-wrap gap-2 items-center justify-center">
+          {fundsQuery.data.map((fund) => (
+            <Card
+              key={fund.index}
+              className="flex-1 min-w-[350px] shadow rounded-xl"
+            >
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CheckCircle
+                    className="text-green-400"
+                    size={20}
+                  ></CheckCircle>
+                  {fund.title}
+                </CardTitle>
+                <CardDescription>
+                  Total donations: {fund.donations} ETH
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col gap-2">
+                  <img src={fund.imageUri} width="350" height="300"></img>
+                  <p className="overflow-y-auto max-h-[200px]">
+                    {fund.description}
+                  </p>
+                </div>
+              </CardContent>{" "}
+              <CardFooter className="flex justify-end gap-2">
+                {address &&
+                  address.toLowerCase() === fund.owner.toLowerCase() && (
+                    <Button
+                      variant={"destructive"}
+                      onClick={() => handleWithdraw(fund.index)}
+                    >
+                      Withdraw
+                    </Button>
+                  )}
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button>Donate</Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Enter donation amount</DialogTitle>
+                    </DialogHeader>
+                    <Input
+                      type="number"
+                      min="0.005"
+                      step="0.1"
+                      placeholder="0.1 ETH"
+                      value={donationAmount}
+                      onChange={(e) => setDonationAmount(e.target.value)}
+                    ></Input>
+                    <DialogFooter className="flex justify-end">
+                      <Button onClick={() => handleDonate(fund.index)}>
+                        Donate {donationAmount} ETH
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      ) : <p className="mx-auto">No funds found yet. Be the first one to create one!</p> : (
+        <p className="text-red-400 mx-auto">
+          An error occured: {fundsQuery.error?.message}
+        </p>
+      )}
       <Toaster />
     </div>
   );
