@@ -1,29 +1,26 @@
-type FundCreated @entity(immutable: true) {
+type Fund @entity {
   id: Bytes!
-  fundIndex: BigInt! # uint256
-  owner: Bytes! # address
-  data: String! # string
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+  fundIndex: BigInt!
+  owner: Wallet!
+  amount: BigInt!
+  donations: [Donation]! @derivedFrom(field: "fund")
+  creationTimestamp: BigInt!
+  creationBlock: BigInt!
+  creationTxHash: Bytes!
 }
 
-type FundDonated @entity(immutable: true) {
+type Donation @entity {
   id: Bytes!
-  fundIndex: BigInt! # uint256
-  donator: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+  fund: Fund!
+  donator: Wallet!
+  timestamp: BigInt!
+  block: BigInt!
+  txHash: Bytes!
 }
 
-type FundWithdrawn @entity(immutable: true) {
+type Wallet @entity {
   id: Bytes!
-  fundIndex: BigInt! # uint256
-  withdrawer: Bytes! # address
-  amount: BigInt! # uint256
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
+  address: Bytes!
+  fundsOwned: [Fund]! @derivedFrom(field: "owner")
+  donations: [Donation]! @derivedFrom(field: "donator")
 }
