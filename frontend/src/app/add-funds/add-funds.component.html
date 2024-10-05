@@ -1,0 +1,41 @@
+<div class="popup-modal">
+    <div class="popup-content">
+      <h3>Create Funds</h3>
+      
+      <div class="forms-menu">
+        <table>
+            <tbody>
+                <tr>
+                    <td>
+                        <label for="fund">Title</label>
+                    </td>
+                    <td>
+                        <input id="fund" type="text" [(ngModel)]="fundData.title" placeholder="Title">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="description">Description</label>
+                    </td>
+                    <td>
+                        <input id="description" type="text" [(ngModel)]="fundData.description" placeholder="Description">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="value">Amount</label>
+                    </td>
+                    <td>
+                        <input id="value" type="number" [(ngModel)]="fundData.amount" placeholder="Amount to Add">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+      </div>
+  
+      <div class="popup-actions">
+        <button class="submit-btn" (click)="submitFunds()">Submit</button>
+        <button class="close-btn" (click)="closeModal()">Cancel</button>
+      </div>
+    </div>
+</div>  
