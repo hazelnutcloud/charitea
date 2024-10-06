@@ -41,6 +41,17 @@ export default function App() {
   // const funds = [
   //   {
   //     index: 0,
+  //     title: "Flash floods - Sungai Buloh",
+  //     description: "Help flash flood victims in Sungai Buloh",
+  //     timestamp: Date.now() / 1000,
+  //     owner: "0xE9Faf59a975BEB99678ACc785c5a901De32bE7C8",
+  //     imageUri: "/fund-image.jpg",
+  //     donations: "10.4",
+  //   },
+  // ];
+  // const funds = [
+  //   {
+  //     index: 0,
   //     title: "My Fund",
   //     description: loremIpsum,
   //     timestamp: Date.now() / 1000,
@@ -321,71 +332,77 @@ export default function App() {
       {/* funds */}
       {fundsQuery.isLoading ? (
         <p className="font-bold mx-auto">Loading funds...</p>
-      ) : fundsQuery.isSuccess ? fundsQuery.data.length > 0 ? (
-        <div className="flex flex-wrap gap-2 items-center justify-center">
-          {fundsQuery.data.map((fund) => (
-            <Card
-              key={fund.index}
-              className="flex-1 min-w-[350px] shadow rounded-xl"
-            >
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <CheckCircle
-                    className="text-green-400"
-                    size={20}
-                  ></CheckCircle>
-                  {fund.title}
-                </CardTitle>
-                <CardDescription>
-                  Total donations: {fund.donations} ETH
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-col gap-2">
-                  <img src={fund.imageUri} width="350" height="300"></img>
-                  <p className="overflow-y-auto max-h-[200px]">
-                    {fund.description}
-                  </p>
-                </div>
-              </CardContent>{" "}
-              <CardFooter className="flex justify-end gap-2">
-                {address &&
-                  address.toLowerCase() === fund.owner.toLowerCase() && (
-                    <Button
-                      variant={"destructive"}
-                      onClick={() => handleWithdraw(fund.index)}
-                    >
-                      Withdraw
-                    </Button>
-                  )}
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button>Donate</Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Enter donation amount</DialogTitle>
-                    </DialogHeader>
-                    <Input
-                      type="number"
-                      min="0.005"
-                      step="0.1"
-                      placeholder="0.1 ETH"
-                      value={donationAmount}
-                      onChange={(e) => setDonationAmount(e.target.value)}
-                    ></Input>
-                    <DialogFooter className="flex justify-end">
-                      <Button onClick={() => handleDonate(fund.index)}>
-                        Donate {donationAmount} ETH
+      ) : fundsQuery.isSuccess ? (
+        fundsQuery.data.length > 0 ? (
+          <div className="flex flex-wrap gap-2 items-center justify-center">
+            {fundsQuery.data.map((fund) => (
+              <Card
+                key={fund.index}
+                className="flex-1 min-w-[350px] shadow rounded-xl"
+              >
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <CheckCircle
+                      className="text-green-400"
+                      size={20}
+                    ></CheckCircle>
+                    {fund.title}
+                  </CardTitle>
+                  <CardDescription>
+                    Total donations: {fund.donations} ETH
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col gap-2">
+                    <img src={fund.imageUri} width="350" height="300"></img>
+                    <p className="overflow-y-auto max-h-[200px]">
+                      {fund.description}
+                    </p>
+                  </div>
+                </CardContent>{" "}
+                <CardFooter className="flex justify-end gap-2">
+                  {address &&
+                    address.toLowerCase() === fund.owner.toLowerCase() && (
+                      <Button
+                        variant={"destructive"}
+                        onClick={() => handleWithdraw(fund.index)}
+                      >
+                        Withdraw
                       </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-      ) : <p className="mx-auto">No funds found yet. Be the first one to create one!</p> : (
+                    )}
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button>Donate</Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Enter donation amount</DialogTitle>
+                      </DialogHeader>
+                      <Input
+                        type="number"
+                        min="0.005"
+                        step="0.1"
+                        placeholder="0.1 ETH"
+                        value={donationAmount}
+                        onChange={(e) => setDonationAmount(e.target.value)}
+                      ></Input>
+                      <DialogFooter className="flex justify-end">
+                        <Button onClick={() => handleDonate(fund.index)}>
+                          Donate {donationAmount} ETH
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <p className="mx-auto">
+            No funds found yet. Be the first one to create one!
+          </p>
+        )
+      ) : (
         <p className="text-red-400 mx-auto">
           An error occured: {fundsQuery.error?.message}
         </p>

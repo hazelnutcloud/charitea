@@ -12,7 +12,7 @@ export interface Fund {
 
 export async function getFunds(): Promise<Fund[]> {
   const res = await fetch(
-    "https://api.studio.thegraph.com/query/90801/charitea/v0.0.1",
+    "https://api.studio.thegraph.com/query/90801/charitea/v0.0.2",
     {
       method: "POST",
       headers: {
@@ -22,6 +22,7 @@ export async function getFunds(): Promise<Fund[]> {
         /*graphQL*/
         query: `query Funds {
               funds {
+                fundIndex
                 title
                 description
                 imageURI
@@ -29,6 +30,7 @@ export async function getFunds(): Promise<Fund[]> {
                   address
                 }
                 creationTimestamp
+                amount
               }
             }`,
       }),
@@ -38,6 +40,8 @@ export async function getFunds(): Promise<Fund[]> {
   if (!res.ok) {
     throw new Error(`${res.status} ${res.statusText}`);
   }
+
+  const json = await res.json()
 
   const rawFunds: {
     title: string;
@@ -49,12 +53,12 @@ export async function getFunds(): Promise<Fund[]> {
     creationTimestamp: number;
     amount: number;
     fundIndex: number;
-  }[] = (await res.json()).data.funds;
+  }[] = json.data.funds;
 
   return rawFunds.map((fund) => ({
     description: fund.description,
     donations: formatEther(BigInt(fund.amount)),
-    imageUri: fund.imageURI,
+    imageUri: "/fund-image.jpg",
     index: fund.fundIndex,
     owner: fund.owner.address,
     timestamp: fund.creationTimestamp,
