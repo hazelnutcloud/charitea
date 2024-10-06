@@ -1,4 +1,8 @@
-import { formatEther } from "viem";
+import { PinataSDK } from "pinata-web3";
+import { formatEther, http, createPublicClient } from "viem";
+import { scrollSepolia } from "viem/chains";
+import { chariteaAbi } from "./abi";
+import { chariteaAddress } from "./consts";
 
 export interface Fund {
   index: number;
@@ -9,6 +13,11 @@ export interface Fund {
   imageUri: string;
   donations: string;
 }
+
+const client = createPublicClient({
+  transport: http(),
+  chain: scrollSepolia,
+});
 
 export async function getFunds(): Promise<Fund[]> {
   const res = await fetch(
@@ -41,7 +50,7 @@ export async function getFunds(): Promise<Fund[]> {
     throw new Error(`${res.status} ${res.statusText}`);
   }
 
-  const json = await res.json()
+  const json = await res.json();
 
   const rawFunds: {
     title: string;
@@ -55,13 +64,40 @@ export async function getFunds(): Promise<Fund[]> {
     fundIndex: number;
   }[] = json.data.funds;
 
-  return rawFunds.map((fund) => ({
-    description: fund.description,
-    donations: formatEther(BigInt(fund.amount)),
-    imageUri: "/fund-image.jpg",
-    index: fund.fundIndex,
-    owner: fund.owner.address,
-    timestamp: fund.creationTimestamp,
-    title: fund.title,
-  }));
+  return await Promise.all(
+    rawFunds.map(async (fund) => {
+      let img = fund.imageURI
+      if (!img) {
+        const [, , hash] = await client.readContract({
+          abi: chariteaAbi,
+          functionName: "funds",
+          args: [BigInt(fund.fundIndex)],
+          address: chariteaAddress,
+        });
+        const { data } = await fetchImage(hash);
+        img = (data as unknown as { image: string }).image;
+      }
+      console.log(img)
+      return {
+        description: fund.description,
+        donations: formatEther(BigInt(fund.amount)),
+        imageUri: img,
+        index: fund.fundIndex,
+        owner: fund.owner.address,
+        timestamp: fund.creationTimestamp,
+        title: fund.title,
+      };
+    })
+  );
 }
+
+const pinata = new PinataSDK({
+  pinataJwt: import.meta.env.VITE_PINATA_JWT,
+  pinataGateway: import.meta.env.VITE_PINATA_GATEWAY,
+});
+
+const fetchImage = async (ipfsHash: string) => {
+  const data = await pinata.gateways.get(ipfsHash);
+  console.log(data);
+  return data;
+};
